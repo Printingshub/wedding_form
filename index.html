@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#7b1636" />
+  <title>Wedding Card Printing Details</title>
+  <style>
+    :root{
+      --maroon:#7b1636;
+      --maroon-dark:#561126;
+      --gold:#b88935;
+      --gold-soft:#e8d2a7;
+      --cream:#fffaf2;
+      --paper:#fffdf9;
+      --ink:#2d2527;
+      --muted:#74696c;
+      --line:#eadfcf;
+      --green:#148447;
+      --danger:#b3261e;
+      --shadow:0 10px 30px rgba(79,44,34,.08);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--ink);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(184,137,53,.08), transparent 28rem),
+        linear-gradient(180deg,#fffaf2 0%,#fff 55%,#fffaf4 100%);
+    }
+
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    a{text-decoration:none;color:inherit}
+
+    .page-shell{
+      width:min(1460px, 100%);
+      margin:auto;
+      padding:24px;
+    }
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      text-align:center;
+      padding:34px 22px 24px;
+      border:1px solid rgba(184,137,53,.28);
+      background:rgba(255,253,249,.88);
+      backdrop-filter:blur(8px);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero:before,.hero:after{
+      content:"";
+      position:absolute;
+      width:150px;height:150px;border:1px solid rgba(184,137,53,.28);
+      border-radius:50%;
+      top:-85px;
+    }
+    .hero:before{left:-50px}.hero:after{right:-50px}
+
+    .eyebrow{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      color:var(--gold);
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+
+    h1{
+      margin:8px 0 8px;
+      font-family:Georgia, "Times New Roman", serif;
+      color:var(--maroon);
+      font-size:clamp(28px,4vw,48px);
+      line-height:1.05;
+    }
+
+    .hero p{margin:0 auto;max-width:760px;color:var(--muted);line-height:1.65}
+
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:12px;
+      margin-top:24px;
+    }
+    .step{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      justify-content:center;
+      color:var(--muted);
+      font-size:13px;
+      min-width:0;
+    }
+    .step-badge{
+      width:30px;height:30px;border-radius:50%;
+      display:grid;place-items:center;
+      border:1px solid var(--gold-soft);
+      background:#fff;
+      color:var(--maroon);
+      font-weight:800;
+      flex:0 0 auto;
+    }
+    .step.active{color:var(--maroon);font-weight:800}
+    .step.active .step-badge{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+
+    .layout{
+      margin-top:22px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 360px;
+      gap:22px;
+      align-items:start;
+    }
+
+    .form-stack{display:grid;gap:18px}
+
+    .card{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--maroon);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:21px;
+      margin:0 0 18px;
+    }
+    .section-title span{
+      width:34px;height:34px;border-radius:10px;
+      display:grid;place-items:center;
+      background:#fff7ed;
+      border:1px solid var(--gold-soft);
+      font-family:system-ui,sans-serif;
+    }
+
+    .required-note{
+      font-size:12px;
+      color:var(--muted);
+      margin:-8px 0 15px 44px;
+    }
+
+    .function-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+
+    .function-option{
+      position:relative;
+    }
+    .function-option input{
+      position:absolute;opacity:0;pointer-events:none;
+    }
+    .function-option label{
+      min-height:120px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      text-align:center;
+      border:1px solid var(--gold-soft);
+      border-radius:16px;
+      background:linear-gradient(180deg,#fff,#fffaf2);
+      color:var(--maroon);
+      font-family:Georgia, "Times New Roman", serif;
+      font-weight:800;
+      font-size:18px;
+      transition:.2s ease;
+      padding:16px;
+    }
+    .function-option label .icon{font-size:30px;font-family:system-ui,sans-serif}
+    .function-option input:checked + label{
+      border:2px solid var(--maroon);
+      box-shadow:0 0 0 4px rgba(123,22,54,.07);
+      transform:translateY(-1px);
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .event-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .event-card{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:18px;
+      background:#fff;
+    }
+    .event-card.nikah{background:linear-gradient(180deg,#fbfffb,#fff)}
+    .event-card.walima{background:linear-gradient(180deg,#fff9f8,#fff)}
+
+    .event-heading{
+      margin:0 0 16px;
+      color:var(--maroon);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:18px;
+      display:flex;align-items:center;gap:8px;
+    }
+
+    .field{
+      display:grid;
+      gap:7px;
+      margin-bottom:14px;
+    }
+    .field:last-child{margin-bottom:0}
+    label.field-label{
+      font-size:13px;
+      font-weight:750;
+      color:#40373a;
+    }
+    .req{color:#c91b1b}
+    input,select,textarea{
+      width:100%;
+      border:1px solid #dcd4cc;
+      border-radius:10px;
+      background:#fff;
+      color:var(--ink);
+      padding:12px 13px;
+      outline:none;
+      transition:.18s ease;
+    }
+    textarea{resize:vertical;min-height:92px}
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 3px rgba(184,137,53,.12);
+    }
+    .invalid{
+      border-color:var(--danger)!important;
+      box-shadow:0 0 0 3px rgba(179,38,30,.08)!important;
+    }
+    .error-text{
+      font-size:11px;
+      color:var(--danger);
+      display:none;
+    }
+    .field.has-error .error-text{display:block}
+
+    .date-time-row,.time-row,.hijri-row{
+      display:grid;
+      gap:10px;
+    }
+    .date-time-row{grid-template-columns:1.4fr 1fr}
+    .time-row{grid-template-columns:1fr 1fr}
+    .hijri-row{grid-template-columns:.75fr 1.55fr 1fr}
+
+    .alert{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      background:#fff8e5;
+      border:1px solid #efdca7;
+      color:#6f5524;
+      border-radius:12px;
+      padding:13px 14px;
+      font-size:13px;
+      line-height:1.55;
+    }
+
+    .action-row{
+      display:flex;
+      gap:12px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+    .btn{
+      border:0;
+      border-radius:11px;
+      padding:13px 20px;
+      font-weight:800;
+      min-height:48px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+    .btn-primary{background:linear-gradient(90deg,var(--maroon-dark),var(--maroon));color:#fff}
+    .btn-outline{background:#fff;color:var(--maroon);border:1px solid var(--maroon)}
+    .btn-whatsapp{background:var(--green);color:#fff;width:100%;font-size:15px}
+
+    .review-panel{
+      position:sticky;
+      top:18px;
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+    }
+    .review-head{
+      padding:16px 18px;
+      background:linear-gradient(90deg,var(--maroon-dark),var(--maroon));
+      color:#fff;
+      font-family:Georgia, "Times New Roman", serif;
+      font-weight:800;
+      font-size:18px;
+    }
+    .review-body{padding:18px;max-height:calc(100vh - 230px);overflow:auto}
+    .review-empty{
+      padding:24px 12px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+    }
+    .summary-section{
+      padding:12px 0;
+      border-bottom:1px solid #eee4da;
+    }
+    .summary-section:last-child{border-bottom:0}
+    .summary-title{
+      color:var(--maroon);
+      font-weight:850;
+      margin-bottom:7px;
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+    .summary-line{
+      font-size:13px;
+      line-height:1.55;
+      color:#453d40;
+      word-break:break-word;
+    }
+    .summary-line strong{color:#242022}
+
+    .confirm-box{
+      padding:16px 18px;
+      background:#fffaf6;
+      border-top:1px solid var(--line);
+    }
+    .checkline{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      font-size:12px;
+      line-height:1.55;
+      color:#53484b;
+      margin-bottom:14px;
+    }
+    .checkline input{width:18px;height:18px;margin-top:1px;flex:0 0 auto}
+
+    .mobile-review{
+      display:none;
+      margin-top:18px;
+    }
+
+    .hidden{display:none!important}
+
+    .footer-note{
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      padding:24px 8px 12px;
+    }
+
+    @media (max-width: 1050px){
+      .layout{grid-template-columns:minmax(0,1fr) 320px}
+      .event-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 860px){
+      .page-shell{padding:14px}
+      .layout{grid-template-columns:1fr}
+      .desktop-review{display:none}
+      .mobile-review{display:block}
+      .review-panel{position:static}
+      .review-body{max-height:none}
+      .steps{grid-template-columns:repeat(5,minmax(78px,1fr));overflow-x:auto;padding-bottom:6px}
+      .step{flex-direction:column;gap:5px;min-width:78px}
+      .step span:last-child{font-size:11px;text-align:center}
+    }
+
+    @media (max-width: 640px){
+      .hero{padding:26px 16px 20px;border-radius:20px}
+      .hero p{font-size:13px}
+      .steps{margin-top:18px}
+      .card{padding:16px;border-radius:14px}
+      .section-title{font-size:18px}
+      .function-grid{grid-template-columns:1fr}
+      .function-option label{
+        min-height:74px;
+        flex-direction:row;
+        justify-content:flex-start;
+        padding:14px 16px;
+        font-size:17px;
+      }
+      .function-option label .icon{font-size:24px}
+      .grid-2,.event-grid,.date-time-row,.time-row,.hijri-row{
+        grid-template-columns:1fr;
+      }
+      .action-row{display:grid;grid-template-columns:1fr}
+      .btn{width:100%}
+      .review-head{font-size:16px}
+    }
+
+    @media (max-width: 380px){
+      .page-shell{padding:9px}
+      h1{font-size:27px}
+      .card{padding:13px}
+      input,select,textarea{padding:11px}
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="eyebrow">💍 Wedding Card Order Form</div>
+      <h1>Wedding Card Printing Details</h1>
+      <p>Please fill in every required detail exactly as you want it printed on the wedding card. Check names, dates, timings, Hijri dates and venue carefully.</p>
+
+      <div class="steps" aria-label="Form progress">
+        <div class="step active"><span class="step-badge">1</span><span>Function</span></div>
+        <div class="step"><span class="step-badge">2</span><span>Couple</span></div>
+        <div class="step"><span class="step-badge">3</span><span>Event</span></div>
+        <div class="step"><span class="step-badge">4</span><span>Compliments</span></div>
+        <div class="step"><span class="step-badge">5</span><span>Review</span></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <main>
+        <form id="weddingForm" novalidate>
+          <div class="form-stack">
+
+            <section class="card" id="functionSection">
+              <h2 class="section-title"><span>1</span> Select Function <span class="req">*</span></h2>
+              <div class="function-grid">
+                <div class="function-option">
+                  <input type="radio" name="functionType" id="fnNikah" value="Nikah" required>
+                  <label for="fnNikah"><span class="icon">💍</span> NIKAH</label>
+                </div>
+                <div class="function-option">
+                  <input type="radio" name="functionType" id="fnWalima" value="Walima" required>
+                  <label for="fnWalima"><span class="icon">🍽️</span> WALIMA</label>
+                </div>
+                <div class="function-option">
+                  <input type="radio" name="functionType" id="fnBoth" value="Nikah + Walima" required>
+                  <label for="fnBoth"><span class="icon">💍 + 🍽️</span> NIKAH + WALIMA</label>
+                </div>
+              </div>
+              <div id="functionError" class="error-text" style="margin-top:10px;">Please select Nikah, Walima, or Nikah + Walima.</div>
+            </section>
+
+            <section class="card">
+              <h2 class="section-title"><span>2</span> Couple Details</h2>
+              <div class="field">
+                <label class="field-label" for="welcomeName">👑 Welcome Name <span class="req">*</span></label>
+                <input id="welcomeName" name="welcomeName" type="text" required placeholder="e.g. Mr. & Mrs. Mohammed Ahmed Khan">
+                <div class="error-text">Please enter the Welcome Name.</div>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label class="field-label" for="groomName">🤵 Groom Name <span class="req">*</span></label>
+                  <input id="groomName" name="groomName" type="text" required placeholder="Enter groom name">
+                  <div class="error-text">Please enter Groom Name.</div>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="groomFather">Groom Father’s Name <span class="req">*</span></label>
+                  <input id="groomFather" name="groomFather" type="text" required placeholder="Enter groom father's name">
+                  <div class="error-text">Please enter Groom Father’s Name.</div>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="brideName">👰 Bride Name <span class="req">*</span></label>
+                  <input id="brideName" name="brideName" type="text" required placeholder="Enter bride name">
+                  <div class="error-text">Please enter Bride Name.</div>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="brideFather">Bride Father’s Name <span class="req">*</span></label>
+                  <input id="brideFather" name="brideFather" type="text" required placeholder="Enter bride father's name">
+                  <div class="error-text">Please enter Bride Father’s Name.</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card" id="eventSection">
+              <h2 class="section-title"><span>3</span> Function Details</h2>
+              <p class="required-note">Relevant function details will appear after selecting Nikah / Walima above.</p>
+
+              <div class="event-grid">
+                <div class="event-card nikah hidden" id="nikahCard">
+                  <h3 class="event-heading">🕌 Nikah Details</h3>
+
+                  <div class="field">
+                    <label class="field-label">Nikah Date & Time <span class="req">*</span></label>
+                    <div class="date-time-row">
+                      <input id="nikahDate" type="date" data-required-when="nikah">
+                      <input id="nikahTime" type="time" data-required-when="nikah">
+                    </div>
+                    <div class="error-text">Please select Nikah date and time.</div>
+                  </div>
+
+                  <div class="field">
+                    <label class="field-label">Nikah Date & Time (Hijri) <span class="req">*</span></label>
+                    <div class="hijri-row">
+                      <select id="nikahHijriDay" data-required-when="nikah"><option value="">Day</option></select>
+                      <select id="nikahHijriMonth" data-required-when="nikah">
+                        <option value="">Month</option>
+                        <option>Muharram</option><option>Safar</option><option>Rabi al-Awwal</option>
+                        <option>Rabi al-Thani</option><option>Jumada al-Awwal</option><option>Jumada al-Thani</option>
+                        <option>Rajab</option><option>Sha'ban</option><option>Ramadan</option>
+                        <option>Shawwal</option><option>Dhu al-Qi'dah</option><option>Dhu al-Hijjah</option>
+                      </select>
+                      <select id="nikahHijriYear" data-required-when="nikah"><option value="">Year</option></select>
+                    </div>
+                    <div class="error-text">Please select complete Nikah Hijri date.</div>
+                  </div>
+
+                  <div class="field">
+                    <label class="field-label">Between Time <span class="req">*</span></label>
+                    <div class="time-row">
+                      <input id="nikahFrom" type="time" data-required-when="nikah" aria-label="Nikah from time">
+                      <input id="nikahTo" type="time" data-required-when="nikah" aria-label="Nikah to time">
+                    </div>
+                    <div class="error-text">Please enter Nikah Between Time.</div>
+                  </div>
+
+                  <div class="field">
+                    <label class="field-label" for="nikahVenue">Nikah Venue <span class="req">*</span></label>
+                    <textarea id="nikahVenue" data-required-when="nikah" placeholder="Enter Nikah venue"></textarea>
+                    <div class="error-text">Please enter Nikah Venue.</div>
+                  </div>
+                </div>
+
+                <div class="event-card walima hidden" id="walimaCard">
+                  <h3 class="event-heading">🍽️ Walima Details</h3>
+
+                  <div class="field">
+                    <label class="field-label">Walima Date & Time <span class="req">*</span></label>
+                    <div class="date-time-row">
+                      <input id="walimaDate" type="date" data-required-when="walima">
+                      <input id="walimaTime" type="time" data-required-when="walima">
+                    </div>
+                    <div class="error-text">Please select Walima date and time.</div>
+                  </div>
+
+                  <div class="field">
+                    <label class="field-label">Walima Date & Time (if separate) <span class="req">*</span></label>
+                    <div class="date-time-row">
+                      <input id="walimaSeparateDate" type="date" data-required-when="walima">
+                      <input id="walimaSeparateTime" type="time" data-required-when="walima">
+                    </div>
+                    <div class="error-text">Please enter the separate Walima date and time.</div>
+                  </div>
+
+                  <div class="field">
+                    <label class="field-label">Walima Date & Time (Hijri) <span class="req">*</span></label>
+                    <div class="hijri-row">
+                      <select id="walimaHijriDay" data-required-when="walima"><option value="">Day</option></select>
+                      <select id="walimaHijriMonth" data-required-when="walima">
+                        <option value="">Month</option>
+                        <option>Muharram</option><option>Safar</option><option>Rabi al-Awwal</option>
+                        <option>Rabi al-Thani</option><option>Jumada al-Awwal</option><option>Jumada al-Thani</option>
+                        <option>Rajab</option><option>Sha'ban</option><option>Ramadan</option>
+                        <option>Shawwal</option><option>Dhu al-Qi'dah</option><option>Dhu al-Hijjah</option>
+                      </select>
+                      <select id="walimaHijriYear" data-required-when="walima"><option value="">Year</option></select>
+                    </div>
+                    <div class="error-text">Please select complete Walima Hijri date.</div>
+                  </div>
+
+                  <div class="field">
+                    <label class="field-label">Between Time <span class="req">*</span></label>
+                    <div class="time-row">
+                      <input id="walimaFrom" type="time" data-required-when="walima" aria-label="Walima from time">
+                      <input id="walimaTo" type="time" data-required-when="walima" aria-label="Walima to time">
+                    </div>
+                    <div class="error-text">Please enter Walima Between Time.</div>
+                  </div>
+
+                  <div class="field">
+                    <label class="field-label" for="walimaVenue">Walima Venue <span class="req">*</span></label>
+                    <textarea id="walimaVenue" data-required-when="walima" placeholder="Enter Walima venue"></textarea>
+                    <div class="error-text">Please enter Walima Venue.</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card">
+              <h2 class="section-title"><span>4</span> Compliments & Mobile Number</h2>
+              <div class="grid-2">
+                <div class="field">
+                  <label class="field-label" for="compliments">💐 With Best Compliments From <span class="req">*</span></label>
+                  <textarea id="compliments" required placeholder="Enter names / family details"></textarea>
+                  <div class="error-text">Please enter Best Compliments details.</div>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="printMobile">📞 Mobile Number to be Printed on Card <span class="req">*</span></label>
+                  <input id="printMobile" type="tel" inputmode="numeric" maxlength="15" required placeholder="e.g. 9876543210">
+                  <div class="error-text">Please enter a valid mobile number.</div>
+                </div>
+              </div>
+            </section>
+
+            <div class="alert">
+              <strong>⚠️</strong>
+              <div>Kindly ensure all details are correct before submission to avoid errors in printing. The Hijri date should be verified by the customer before sending.</div>
+            </div>
+
+            <section class="card">
+              <div class="action-row">
+                <button type="button" class="btn btn-outline" id="resetBtn">Reset Form</button>
+                <button type="button" class="btn btn-primary" id="reviewBtn">Review Details</button>
+              </div>
+            </section>
+
+            <div class="mobile-review" id="mobileReviewSlot"></div>
+          </div>
+        </form>
+      </main>
+
+      <aside class="desktop-review" id="desktopReviewSlot"></aside>
+    </div>
+
+    <div class="footer-note">Wedding Card Printing Details • Please verify all spellings before WhatsApp submission.</div>
+  </div>
+
+  <template id="reviewTemplate">
+    <section class="review-panel">
+      <div class="review-head">👁 Review Your Details</div>
+      <div class="review-body">
+        <div class="review-empty">Fill the form and click <strong>Review Details</strong> to see the final summary here.</div>
+        <div class="review-summary hidden"></div>
+      </div>
+      <div class="confirm-box hidden">
+        <label class="checkline">
+          <input type="checkbox" class="confirmCheck">
+          <span>I have checked all names, spellings, dates, timings, Hijri dates, venues and mobile number, and confirm that the above details are correct for printing.</span>
+        </label>
+        <button type="button" class="btn btn-whatsapp sendWhatsapp">🟢 Send Details on WhatsApp<br>+91 8424849769</button>
+      </div>
+    </section>
+  </template>
+
+  <script>
+    const WHATSAPP_NUMBER = "918424849769";
+    const form = document.getElementById("weddingForm");
+    const nikahCard = document.getElementById("nikahCard");
+    const walimaCard = document.getElementById("walimaCard");
+    const reviewBtn = document.getElementById("reviewBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const functionError = document.getElementById("functionError");
+
+    function createReviewPanel(slot){
+      const tpl = document.getElementById("reviewTemplate").content.cloneNode(true);
+      slot.appendChild(tpl);
+    }
+    createReviewPanel(document.getElementById("desktopReviewSlot"));
+    createReviewPanel(document.getElementById("mobileReviewSlot"));
+
+    const panels = [...document.querySelectorAll(".review-panel")];
+
+    function populateHijriOptions(){
+      ["nikahHijriDay","walimaHijriDay"].forEach(id=>{
+        const select=document.getElementById(id);
+        for(let d=1; d<=30; d++){
+          const opt=document.createElement("option");
+          opt.value=d; opt.textContent=d;
+          select.appendChild(opt);
+        }
+      });
+      ["nikahHijriYear","walimaHijriYear"].forEach(id=>{
+        const select=document.getElementById(id);
+        for(let y=1445; y<=1465; y++){
+          const opt=document.createElement("option");
+          opt.value=y; opt.textContent=y+" AH";
+          select.appendChild(opt);
+        }
+      });
+    }
+    populateHijriOptions();
+
+    function selectedFunction(){
+      return document.querySelector('input[name="functionType"]:checked')?.value || "";
+    }
+
+    function updateFunctionVisibility(){
+      const val=selectedFunction();
+      const showNikah=val==="Nikah" || val==="Nikah + Walima";
+      const showWalima=val==="Walima" || val==="Nikah + Walima";
+      nikahCard.classList.toggle("hidden",!showNikah);
+      walimaCard.classList.toggle("hidden",!showWalima);
+
+      document.querySelectorAll('[data-required-when="nikah"]').forEach(el=>el.required=showNikah);
+      document.querySelectorAll('[data-required-when="walima"]').forEach(el=>el.required=showWalima);
+
+      functionError.style.display="none";
+      updateSteps(2);
+    }
+
+    document.querySelectorAll('input[name="functionType"]').forEach(r=>r.addEventListener("change",updateFunctionVisibility));
+
+    function updateSteps(active){
+      document.querySelectorAll(".step").forEach((s,i)=>{
+        s.classList.toggle("active", i+1<=active);
+      });
+    }
+
+    function formatDate(value){
+      if(!value) return "";
+      const [y,m,d]=value.split("-").map(Number);
+      return new Date(y,m-1,d).toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+    }
+
+    function formatTime(value){
+      if(!value) return "";
+      const [h,m]=value.split(":").map(Number);
+      const dt=new Date();
+      dt.setHours(h,m,0,0);
+      return dt.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit",hour12:true});
+    }
+
+    function value(id){ return document.getElementById(id)?.value.trim() || ""; }
+
+    function markField(el, ok){
+      const field=el.closest(".field");
+      if(!field) return;
+      field.classList.toggle("has-error",!ok);
+      el.classList.toggle("invalid",!ok);
+    }
+
+    function validateGroup(ids){
+      let ok=true;
+      ids.forEach(id=>{
+        const el=document.getElementById(id);
+        const valid=!!el.value.trim();
+        if(!valid) ok=false;
+        markField(el,valid);
+      });
+      return ok;
+    }
+
+    function validateForm(){
+      let valid=true;
+
+      if(!selectedFunction()){
+        functionError.style.display="block";
+        valid=false;
+      } else {
+        functionError.style.display="none";
+      }
+
+      ["welcomeName","groomName","groomFather","brideName","brideFather","compliments"].forEach(id=>{
+        const el=document.getElementById(id);
+        const ok=!!el.value.trim();
+        markField(el,ok);
+        if(!ok) valid=false;
+      });
+
+      const mobile=document.getElementById("printMobile");
+      const mobileDigits=mobile.value.replace(/\D/g,"");
+      const mobileOk=mobileDigits.length>=10 && mobileDigits.length<=13;
+      markField(mobile,mobileOk);
+      if(!mobileOk) valid=false;
+
+      const fn=selectedFunction();
+
+      if(fn==="Nikah" || fn==="Nikah + Walima"){
+        if(!validateGroup(["nikahDate","nikahTime","nikahHijriDay","nikahHijriMonth","nikahHijriYear","nikahFrom","nikahTo","nikahVenue"])) valid=false;
+      }
+      if(fn==="Walima" || fn==="Nikah + Walima"){
+        if(!validateGroup(["walimaDate","walimaTime","walimaSeparateDate","walimaSeparateTime","walimaHijriDay","walimaHijriMonth","walimaHijriYear","walimaFrom","walimaTo","walimaVenue"])) valid=false;
+      }
+
+      if(!valid){
+        const firstError=document.querySelector(".field.has-error, #functionError[style*='block']");
+        firstError?.scrollIntoView({behavior:"smooth",block:"center"});
+      }
+      return valid;
+    }
+
+    form.addEventListener("input", e=>{
+      if(e.target.matches("input,textarea,select")){
+        if(e.target.value.trim()) markField(e.target,true);
+        updateSteps(3);
+      }
+    });
+
+    function buildSummaryHTML(){
+      const fn=selectedFunction();
+      let html = `
+        <div class="summary-section">
+          <div class="summary-title">Function</div>
+          <div class="summary-line"><strong>${escapeHtml(fn)}</strong></div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-title">Welcome Name</div>
+          <div class="summary-line">${escapeHtml(value("welcomeName"))}</div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-title">Groom Details</div>
+          <div class="summary-line"><strong>Name:</strong> ${escapeHtml(value("groomName"))}</div>
+          <div class="summary-line"><strong>Father's Name:</strong> ${escapeHtml(value("groomFather"))}</div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-title">Bride Details</div>
+          <div class="summary-line"><strong>Name:</strong> ${escapeHtml(value("brideName"))}</div>
+          <div class="summary-line"><strong>Father's Name:</strong> ${escapeHtml(value("brideFather"))}</div>
+        </div>`;
+
+      if(fn==="Nikah" || fn==="Nikah + Walima"){
+        html += `
+        <div class="summary-section">
+          <div class="summary-title">Nikah Details</div>
+          <div class="summary-line"><strong>Date & Time:</strong> ${formatDate(value("nikahDate"))}, ${formatTime(value("nikahTime"))}</div>
+          <div class="summary-line"><strong>Hijri:</strong> ${escapeHtml(value("nikahHijriDay"))} ${escapeHtml(value("nikahHijriMonth"))} ${escapeHtml(value("nikahHijriYear"))} AH</div>
+          <div class="summary-line"><strong>Between:</strong> ${formatTime(value("nikahFrom"))} to ${formatTime(value("nikahTo"))}</div>
+          <div class="summary-line"><strong>Venue:</strong> ${escapeHtml(value("nikahVenue")).replace(/\n/g,"<br>")}</div>
+        </div>`;
+      }
+
+      if(fn==="Walima" || fn==="Nikah + Walima"){
+        html += `
+        <div class="summary-section">
+          <div class="summary-title">Walima Details</div>
+          <div class="summary-line"><strong>Date & Time:</strong> ${formatDate(value("walimaDate"))}, ${formatTime(value("walimaTime"))}</div>
+          <div class="summary-line"><strong>Separate Date & Time:</strong> ${formatDate(value("walimaSeparateDate"))}, ${formatTime(value("walimaSeparateTime"))}</div>
+          <div class="summary-line"><strong>Hijri:</strong> ${escapeHtml(value("walimaHijriDay"))} ${escapeHtml(value("walimaHijriMonth"))} ${escapeHtml(value("walimaHijriYear"))} AH</div>
+          <div class="summary-line"><strong>Between:</strong> ${formatTime(value("walimaFrom"))} to ${formatTime(value("walimaTo"))}</div>
+          <div class="summary-line"><strong>Venue:</strong> ${escapeHtml(value("walimaVenue")).replace(/\n/g,"<br>")}</div>
+        </div>`;
+      }
+
+      html += `
+        <div class="summary-section">
+          <div class="summary-title">Best Compliments From</div>
+          <div class="summary-line">${escapeHtml(value("compliments")).replace(/\n/g,"<br>")}</div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-title">Mobile Number</div>
+          <div class="summary-line">${escapeHtml(value("printMobile"))}</div>
+        </div>`;
+      return html;
+    }
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
+    }
+
+    function renderReview(){
+      const html=buildSummaryHTML();
+      panels.forEach(panel=>{
+        panel.querySelector(".review-empty").classList.add("hidden");
+        const summary=panel.querySelector(".review-summary");
+        summary.innerHTML=html;
+        summary.classList.remove("hidden");
+        panel.querySelector(".confirm-box").classList.remove("hidden");
+        panel.querySelector(".confirmCheck").checked=false;
+      });
+      updateSteps(5);
+
+      if(window.innerWidth <= 860){
+        document.getElementById("mobileReviewSlot").scrollIntoView({behavior:"smooth",block:"start"});
+      }
+    }
+
+    function buildWhatsAppMessage(){
+      const fn=selectedFunction();
+      const lines=[
+        "💍 *WEDDING CARD PRINTING DETAILS* 🕌",
+        "",
+        `*Function:* ${fn}`,
+        "",
+        "👑 *WELCOME NAME*",
+        value("welcomeName"),
+        "",
+        "🤵 *GROOM DETAILS*",
+        `Name: ${value("groomName")}`,
+        `Father's Name: ${value("groomFather")}`,
+        "",
+        "👰 *BRIDE DETAILS*",
+        `Name: ${value("brideName")}`,
+        `Father's Name: ${value("brideFather")}`,
+        ""
+      ];
+
+      if(fn==="Nikah" || fn==="Nikah + Walima"){
+        lines.push(
+          "📅 *NIKAH DETAILS*",
+          `Date & Time: ${formatDate(value("nikahDate"))}, ${formatTime(value("nikahTime"))}`,
+          `Date & Time (Hijri): ${value("nikahHijriDay")} ${value("nikahHijriMonth")} ${value("nikahHijriYear")} AH`,
+          `Between Time: ${formatTime(value("nikahFrom"))} to ${formatTime(value("nikahTo"))}`,
+          `Venue: ${value("nikahVenue")}`,
+          ""
+        );
+      }
+
+      if(fn==="Walima" || fn==="Nikah + Walima"){
+        lines.push(
+          "🍽️ *WALIMA DETAILS*",
+          `Date & Time: ${formatDate(value("walimaDate"))}, ${formatTime(value("walimaTime"))}`,
+          `Date & Time (if separate): ${formatDate(value("walimaSeparateDate"))}, ${formatTime(value("walimaSeparateTime"))}`,
+          `Date & Time (Hijri): ${value("walimaHijriDay")} ${value("walimaHijriMonth")} ${value("walimaHijriYear")} AH`,
+          `Between Time: ${formatTime(value("walimaFrom"))} to ${formatTime(value("walimaTo"))}`,
+          `Venue: ${value("walimaVenue")}`,
+          ""
+        );
+      }
+
+      lines.push(
+        "💐 *WITH BEST COMPLIMENTS FROM*",
+        value("compliments"),
+        "",
+        "📞 *MOBILE NUMBER TO BE PRINTED ON CARD*",
+        value("printMobile"),
+        "",
+        "✅ Customer has reviewed and confirmed that all details are correct for printing."
+      );
+
+      return lines.join("\n");
+    }
+
+    reviewBtn.addEventListener("click",()=>{
+      if(validateForm()) renderReview();
+    });
+
+    panels.forEach(panel=>{
+      panel.querySelector(".sendWhatsapp").addEventListener("click",()=>{
+        if(!validateForm()) return;
+        const confirm=panel.querySelector(".confirmCheck");
+        if(!confirm.checked){
+          alert("Please confirm that you have checked all details before sending.");
+          return;
+        }
+        const message=encodeURIComponent(buildWhatsAppMessage());
+        const url=`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+        window.open(url,"_blank","noopener,noreferrer");
+      });
+    });
+
+    resetBtn.addEventListener("click",()=>{
+      if(!confirm("Clear all entered wedding card details?")) return;
+      form.reset();
+      nikahCard.classList.add("hidden");
+      walimaCard.classList.add("hidden");
+      document.querySelectorAll(".field").forEach(f=>f.classList.remove("has-error"));
+      document.querySelectorAll(".invalid").forEach(e=>e.classList.remove("invalid"));
+      panels.forEach(panel=>{
+        panel.querySelector(".review-empty").classList.remove("hidden");
+        panel.querySelector(".review-summary").classList.add("hidden");
+        panel.querySelector(".review-summary").innerHTML="";
+        panel.querySelector(".confirm-box").classList.add("hidden");
+      });
+      updateSteps(1);
+      window.scrollTo({top:0,behavior:"smooth"});
+    });
+  </script>
+</body>
+</html>
